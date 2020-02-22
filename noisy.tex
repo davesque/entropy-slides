@@ -53,17 +53,19 @@
   \begin{frame}{Basic Concepts}
     What is noise?
     \begin{itemize}
-      \item Perturbation of transmitted signal at either terminal or in channel
-      \item Received signal may not be same as transmitted signal
+      \item Perturbation of transmitted signal ($S$) by noise ($N$) at either terminal or in channel
+      \item Received signal ($E$) may not be same as transmitted signal ($S$)
     \end{itemize}
+
     \begin{figure}
       \footnotesize
       \begin{tikzpicture}[scale=0.45,->,thick]
         \draw (-2,0.5) -- (-0.2,0.5);
-        \node [left] at (-2,0.575) {transmitted};
+        \node [left] at (-2,0.575) {$S$};
+        \node [below left] at (0,-1.95) {noise:};
 
         \draw (0.5,-2) -- (0.5,-0.2);
-        \node [below] at (0.5,-2) {noise};
+        \node [below] at (0.5,-2) {$N$};
 
         \draw [ultra thick] (0,0) rectangle (1,1);
         \node [above] at (0.5,1) {transmitter};
@@ -72,16 +74,16 @@
         \node [above] at (6,0.5) {channel};
 
         \draw (6,-2) -- (6,0.3);
-        \node [below] at (6,-2) {noise};
+        \node [below] at (6,-2) {$N$};
 
         \draw [ultra thick] (11,0) rectangle (12,1);
         \node [above] at (11.5,1) {receiver};
 
         \draw (11.5,-2) -- (11.5,-0.2);
-        \node [below] at (11.5,-2) {noise};
+        \node [below] at (11.5,-2) {$N$};
 
         \draw (12.2,0.5) -- (14,0.5);
-        \node [right] at (14,0.575) {received};
+        \node [right] at (14,0.575) {$E$};
       \end{tikzpicture}
       \caption{Sources of noise.}
     \end{figure}
@@ -90,7 +92,15 @@
   \begin{frame}{Kinds of Noise}
     Two different kinds of noise:
     \begin{itemize}
-      \item Distortion -- received $\neq$ transmitted, but received $= f($ transmitted $)$
+      \item Distortion: $E \neq S$ and $E = f(S)$
+      \begin{itemize}
+        \item If $f^{-1}$ exists for $f$, recovery of $S$ from $E$ is possible
+      \end{itemize}
+      \item Random noise: $E \neq S$ and $E = f(S, N)$
+      \begin{itemize}
+        \item Noise $N$ is random variable; may be represented by stochastic
+        process
+      \end{itemize}
     \end{itemize}
   \end{frame}
 
