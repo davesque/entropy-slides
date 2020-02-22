@@ -6,8 +6,8 @@
 \setlist[itemize,2]{before*=\small,label=$\circ$}
 \setlist[itemize,3]{before*=\footnotesize,label=\Smiley}
 
-\usepackage{pifont}
 \usepackage{marvosym}
+\usepackage{tikz}
 
 \title{%
   Discrete Channels w/Noise \\
@@ -18,15 +18,17 @@
 
   \maketitle
 
-  \section{First, some review...}
+  \section{First, some review... \small (p.1 -- 19)}
 
   \begin{frame}{Introduction}
     \begin{columns}
+
       \column{\dimexpr\paperwidth-10pt}
+
       \begin{itemize}
         \item Context of signal processing (PCM, PPM)
         \item Communication is about reproducing messages sent over channels
-        \item Mathematical theory shouldn’t care about meaning of messages
+        \item Mathematical theory shouldn't care about meaning of messages
         \begin{itemize}
           \item Instead, focus is on message as one selected from many possible
           \item Absence of meaning allows messages to be viewed as random variables
@@ -37,13 +39,58 @@
           \item Logarithm is best choice
           \begin{itemize}
             \item Engineering parameters vary linearly w/log of possibilities
-            \item More intuitive -- 2 disks have twice the information ($2^{2x}$ states)
-            \item Mathematically convenient -- ``downgrades" operations; pow
-            $\rightarrow$ mul; mul $\rightarrow$ add
+            \item More intuitive -- 2 disks have twice the information ($(2^x)(2^x) = 2^{2x}$ states)
+            \item Mathematically convenient -- ``downgrades" operations; $\log ab = \log a + \log b$, etc.
           \end{itemize}
         \end{itemize}
       \end{itemize}
+
     \end{columns}
+  \end{frame}
+
+  \section{Discrete Noisy Channels \small (p.19 -- 28)}
+
+  \begin{frame}{Basic Concepts}
+    What is noise?
+    \begin{itemize}
+      \item Perturbation of transmitted signal at either terminal or in channel
+      \item Received signal may not be same as transmitted signal
+    \end{itemize}
+    \begin{figure}
+      \begin{tikzpicture}[scale=0.5]
+        \draw [thick,->] (-2,0.5) -- (-0.2,0.5);
+        \node [left] at (-2,0.5) {\footnotesize source};
+
+        \draw [thick,->] (0.5,-2) -- (0.5,-0.2);
+        \node [below] at (0.5,-2) {\footnotesize noise};
+
+        \draw [ultra thick] (0,0) rectangle (1,1);
+        \node [above] at (0.5,1) {\footnotesize transmitter};
+
+        \draw [thick,->] (1.2,0.5) -- (10.8,0.5);
+        \node [above] at (6,0.5) {\footnotesize channel};
+
+        \draw [thick,->] (6,-2) -- (6,0.3);
+        \node [below] at (6,-2) {\footnotesize noise};
+
+        \draw [ultra thick] (11,0) rectangle (12,1);
+        \node [above] at (11.5,1) {\footnotesize receiver};
+
+        \draw [thick,->] (11.5,-2) -- (11.5,-0.2);
+        \node [below] at (11.5,-2) {\footnotesize noise};
+
+        \draw [thick,->] (12.2,0.5) -- (14,0.5);
+        \node [right] at (14,0.575) {\footnotesize received};
+      \end{tikzpicture}
+      \caption{Sources of noise.}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}{Kinds of Noise}
+    Two different kinds of noise:
+    \begin{itemize}
+      \item Distortion -- received $\neq$ transmitted, but received $= f($ transmitted $)$
+    \end{itemize}
   \end{frame}
 
 \end{document}
