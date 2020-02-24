@@ -1,13 +1,17 @@
 \documentclass{beamer}
 \usetheme{metropolis}
 
-\usepackage{enumitem}
-\setlist[itemize,1]{before*=\normalsize,label=$\bullet$}
-\setlist[itemize,2]{before*=\small,label=$\circ$}
-\setlist[itemize,3]{before*=\footnotesize,label=\Smiley}
-
 \usepackage{marvosym}
 \usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\setbeamertemplate{itemize item}{\scriptsize\raise1.25pt\hbox{\donotcoloroutermaths$\bullet$}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1.5pt\hbox{\donotcoloroutermaths$\blacktriangleright$}}
+\setbeamertemplate{itemize subsubitem}{\tiny\raise1.5pt\hbox{\donotcoloroutermaths\Smiley}}
+\setbeamertemplate{enumerate item}{\insertenumlabel.}
+\setbeamertemplate{enumerate subitem}{\insertenumlabel.\insertsubenumlabel}
+\setbeamertemplate{enumerate subsubitem}{\insertenumlabel.\insertsubenumlabel.\insertsubsubenumlabel}
+\setbeamertemplate{enumerate mini template}{\insertenumlabel}
 
 \title{%
   Discrete Channels w/Noise \\
@@ -21,7 +25,7 @@
   \section{First, some review... \\
            \small (p.1 -- 19 of Shannon)}
 
-  \begin{frame}{Introduction}
+  \begin{frame}{Introduction \small (p.1)}
     \begin{itemize}
       \item Context of signal processing (PCM, PPM)
       \item Communication is reproducing messages sent over channels
@@ -42,6 +46,93 @@
         \end{itemize}
       \end{itemize}
     \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Introduction \small (p.2)}
+    \begin{figure}
+      \centering
+      \includegraphics[scale=0.5]{images/basic.png}
+      \caption{A general communications system.}
+    \end{figure}
+  \end{frame}
+
+  \begin{frame}{Discrete Noiseless Channel \small (p.3)}
+    The capacity $C$ of a discrete noiseless channel in bits per second:
+    \begin{equation}
+      C = \lim_{T \rightarrow \infty} \frac{\log N(T)}{T}
+    \end{equation}
+    where $N(T)$ is the number of allowed message of a given length $T$:
+    \begin{equation}
+      N(t) = N(t - t_1) + N(t - t_2) + \cdots + N(t - t_n)
+    \end{equation}
+  \end{frame}
+
+  \begin{frame}{Discrete Source of Information \small (p.5)}
+    Kinds of sources:
+    \begin{itemize}
+      \item Nth-order approximations:
+      \begin{itemize}
+        \item Zero-order: independent and equiprobable
+        \item First-order: independent but with frequencies from some text
+        \item Second-order: dependency on previous symbol
+        \item etc.
+      \end{itemize}
+      \item Markov processes: Finite number of states with transition probabilities.
+      \begin{itemize}
+        \item Ergodic processes: Statistical properties approach definite
+          limits as the length of sequences become longer.
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Entropy Properties \small (p.10)}
+    Chosen measure of information $H(p_1, p_2, \ldots, p_n)$ must have these
+    properties:
+    \begin{enumerate}
+      \item $H$ should be continuous over any $p_i$.
+      \item If all $p_i = \frac{1}{n}$, then $H$ should be monotonically
+        increasing function of $n$.
+      \item If choice broken into successive choices, then should be weighted
+        sum of choices.  Example:
+        \begin{equation}
+          H\left(\frac{1}{2}, \frac{1}{3}, \frac{1}{6}\right) = H\left(\frac{1}{2},
+          \frac{1}{2}\right) + \frac{1}{2} H\left(\frac{2}{3}, \frac{1}{3}\right)
+        \end{equation}
+    \end{enumerate}
+  \end{frame}
+
+  \begin{frame}{Entropy Properties \small (p.10)}
+    From the previous properties, we get this:
+    \begin{equation}
+      H(p_1, p_2, \ldots, p_n) = \sum_i p_i \log \frac{1}{p_i} = -\sum_i p_i \log p_i
+    \end{equation}
+  \end{frame}
+
+  \begin{frame}{Joint and Conditional Entropy \small (p.12)}
+    For two events $x$ and $y$, the joint entropy is:
+    \begin{equation}
+      H(x, y) = -\sum_{i,j} p(i,j) \log p(i,j)
+    \end{equation}
+    while
+    \begin{align}
+      H(x) &= -\sum_{i,j} p(i,j) \log \sum_k p(i,k) \\
+      H(y) &= -\sum_{i,j} p(i,j) \log \sum_k p(k,j)
+    \end{align}
+  \end{frame}
+
+  \begin{frame}{Joint and Conditional Entropy \small (p.12)}
+    Conditional probability is:
+    \begin{equation}
+      p_i(j) = \frac{p(i,j)}{\sum_k p(i,k)}
+    \end{equation}
+    Conditional entropy is:
+    \begin{equation}
+      H_x(y) = -\sum_{i,j} p(i,j) \log p_i(j)
+    \end{equation}
+    Based on all these definitions, we get:
+    \begin{equation}
+      H(x,y) = H(x) + H_x(y)
+    \end{equation}
   \end{frame}
 
   \section{Discrete Noisy Channels \\
@@ -210,6 +301,79 @@
       \item $H_y(x) = -\left[ 0.5 \log 0.5 + 0.5 \log 0.5 \right] = 1$ bits per symbol
       \item $R = 1000 - 1000 = 0$ bits per second
     \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Correction Theorem \small (p.20--21)}
+    \textbf{Correction Theorem} {\footnotesize (Theorem 10 from Shannon)}: \\
+    (Part I) If correction channel has capacity $H_y(x)$, possible to send correction
+    data to correct all but arbitrarily small faction $\epsilon$ of errors. \\
+    (Part II) Not possible if channel has capacity less than $H_y(x)$.
+  \end{frame}
+
+  \begin{frame}{Correction Theorem \small (p.21)}
+    \textbf{Proof of part I}: \\
+    For sequences of transmitted signals $M$ and received signals $M'$, there
+    are $T H_y(x)$ of the $M$'s which could have produced each $M'$.
+    Therefore, $T H_y(x)$ binary digits of correction data to send every $T$
+    seconds.
+  \end{frame}
+
+  \begin{frame}{Correction Theorem \small (p.21)}
+    \textbf{Proof of part II}: \\
+    For any discrete variables $x$, $y$, and $z$:
+    \begin{align}
+      H_y(x, z) &\ge H_y(x) & \\
+      H_y(z) + H_{yz}(x) &\ge H_y(x) & \\
+      H_{yz}(x) &\ge H_y(x) - H_y(z) &\; \left( \ge H_y(x) - H(z) \right) \\
+      \implies H_{yz}(x) &\ge H_y(x) - H(z) &
+    \end{align}
+    If $x$ is source, $y$ is received, and $z$ is correction signal, then
+    $H_{yz}(x)$ is residual information while knowing transmitted signal and
+    correction data.
+  \end{frame}
+
+  \begin{frame}{Actual Rate of Transmission \small (p.21--22)}
+    Alternative formulations of actual rate of transmission:
+    \begin{align}
+      R &= H(x) - H_y(x) \\
+        &= H(y) - H_x(y) \\
+        &= H(x) + H(y) - H(x,y)
+    \end{align}
+    Equation 19 is information transmitted less ambiguity of received.
+    Equation 20 is information received less part due to noise.  Equation 21 is
+    number of bits common to $H(x)$ and $H(y)$.
+  \end{frame}
+
+  \begin{frame}{Capacity of Noisy Channel \small (p.22)}
+    Capacity $C$ of noisy channel:
+    \begin{equation}
+      C = \max(H(x) - H_y(x))
+    \end{equation}
+    where max is with respect to all possible information sources.  This
+    theorem may seem rather mudane.  But we'll soon why it's interesting.
+  \end{frame}
+
+  \begin{frame}{Fundamental Theorem of Noisy Channel \small (p.22)}
+    \begin{itemize}
+      \item Why talk about capacity of noisy channel?  Can such a channel
+        transmit anything but corrupted data?
+      \item Redundancy $=$ lower probability of errors
+      \item Must redundancy be increased indefinitely to continue reducing
+        error rate?  Will channel capacity be entirely used up by redundancy?
+      \item No!  Errors can be reduced through proper encoding, which utilizes
+        redundancy but does not consume increasingly more capacity.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Fundamental Theorem of Noisy Channel \small (p.22)}
+    The fundamental theorem of a noisy channel:
+
+    \textit{Let channel have capacity $C$ and source have entropy per second
+    $H$.  If $H \le C$, there is coding system such that output of source can
+    be transmitted over channel with arbitrarily small frequency of error
+    (equivocation).  If $H > C$, possible to encode source so that equivocation
+    less than $H - C + \epsilon$.  No encoding method with equivocation less
+    than $H - C$.}
   \end{frame}
 
 \end{document}
